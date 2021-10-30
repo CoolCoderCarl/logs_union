@@ -1,39 +1,31 @@
 import json
 
-# UNION FILES
-data1 = data2 = ""
+def createSortedFile(pathToFirstLog, pathToSecondLog, pathToResultLog):
+    with open(pathToFirstLog) as fl:
+        log1 = fl.read()
 
-# Reading data from log1
-# Path to dir1
-with open('PATH_TO_DIR1') as fp:
-    data1 = fp.read()
+    with open(pathToSecondLog) as sl:
+        log2 = sl.read()
 
-# Reading data from log2
-# Path to dir2
-with open('PATH_TO_DIR2') as fp:
-    data2 = fp.read()
+    unionData = log1 + log2
 
-unionData = data1 + data2
+    # print(unionData)
+    # print(type(unionData))
 
-# print(unionData)
-# print(type(unionData))
+    unionList = [json.loads(jline) for jline in unionData.splitlines()]
+    # print(unionList)
+    # print(type(unionList))
+    # print(result[0])
+    # listElem = result[0]
+    # print(type(listElem))
 
-result = [json.loads(jline) for jline in unionData.splitlines()]
-print(result)
-print(type(result))
-# print(result[0])
-# listElem = result[0]
-# print(type(listElem))
+    sortedList = sorted(unionList, key=lambda k: k['timestamp'])
+    # print(sortedList)
+    # print(type(sortedList))
 
-newList = sorted(result, key=lambda k: k['timestamp'])
-print(newList)
-print(type(newList))
+    with open(pathToResultLog, 'w') as outfile:
+        for entry in sortedList:
+            json.dump(entry, outfile)
+            outfile.write('\n')
 
-# SAVE TO NEW FILE
-# Path to result file
-with open('result.jsonl', 'w') as outfile:
-    for entry in newList:
-        json.dump(entry, outfile)
-        outfile.write('\n')
-
-outfile.close()
+    outfile.close()
