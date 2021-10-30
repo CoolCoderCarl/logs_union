@@ -1,9 +1,9 @@
+import sys
+import parserUnion
 import logsUnion
 
-pathToFirstLog = ''
-pathToSecondLog = ''
-pathToResultLog = ''
-
 if __name__ == '__main__':
-    logsUnion.createSortedFile(pathToFirstLog, pathToSecondLog, pathToResultLog)
+    parser = parserUnion.createParser()
+    namespace = parser.parse_args(sys.argv[1:])
 
+    logsUnion.createSortedFile(namespace.first_log, namespace.second_log, namespace.output_log)
